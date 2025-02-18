@@ -21,7 +21,7 @@ provider "google" {
 }
 
 # 1) Create a custom VPC network (no auto subnet creation)
-resource "google_compute_network" "main_vpc" {
+resource "google_compute_network" "default" {
   name                    = var.network_name
   project                 = var.project_id
   routing_mode            = "REGIONAL"
@@ -29,11 +29,11 @@ resource "google_compute_network" "main_vpc" {
 }
 
 # 2) Create a subnetwork within that VPC
-resource "google_compute_subnetwork" "main_subnetwork" {
+resource "google_compute_subnetwork" "default" {
   name          = var.network_name
   project       = var.project_id
   region        = var.region
-  network       = google_compute_network.main_vpc.self_link
+  network       = google_compute_network.default.self_link
   ip_cidr_range = "10.0.0.0/24"
 }
 
@@ -41,7 +41,7 @@ resource "google_compute_subnetwork" "main_subnetwork" {
 resource "google_compute_firewall" "allow_ssh" {
   name    = "allow-ssh-in-custom-vpc"
   project = var.project_id
-  network = google_compute_network.main_vpc.self_link
+  network = google_compute_network.default.self_link
 
   allow {
     protocol = "tcp"
@@ -54,7 +54,7 @@ resource "google_compute_firewall" "allow_ssh" {
 
 # 4) Create an Ubuntu VM attached to the custom VPC/subnet
 resource "google_compute_instance" "ubuntu_vm" {
-  name         = "var.vm_name"
+  name         = var.vm_name
   machine_type = "e2-micro"
   zone         = var.zone
 
@@ -69,8 +69,8 @@ resource "google_compute_instance" "ubuntu_vm" {
 
   # Attach to the custom VPC and subnetwork
   network_interface {
-    network    = google_compute_network.main_vpc.self_link
-    subnetwork = google_compute_subnetwork.main_subnetwork.self_link
+    network    = google_compute_network.default.self_link
+    subnetwork = google_compute_subnetwork.default.self_link
     # Gives the VM a public IP. Comment this out if you only want private IPs.
     access_config {}
   }
