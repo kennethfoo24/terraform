@@ -28,3 +28,16 @@ variable "vm_name" {
   description = "VM name"
   default     = "kenneth-ubuntu-vm"
 }
+
+variable "os_type" {
+  type        = string
+  description = <<EOT
+Select which OS to use. Valid options (in this example):
+  - "projects/ubuntu-os-cloud/global/images/family/ubuntu-2004-lts"
+  - "projects/centos-cloud/global/images/family/centos-9"
+  - "projects/rhel-cloud/global/images/family/rhel-9"
+  - "projects/windows-cloud/global/images/family/windows-2022"
+EOT
+  default = "projects/ubuntu-os-cloud/global/images/family/ubuntu-2004-lts"
+}
+

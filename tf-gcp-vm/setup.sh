@@ -12,7 +12,7 @@ location        = "us-central1-c"
 project_id      = "$GOOGLE_CLOUD_PROJECT"
 name            = "kenneth-ubuntu-vm"
 vm_name         = "kenneth-ubuntu-vm"
-network_name    = "kenneth-ubuntu-vm"
+network_name    = "kenneth-vm-network"
 ssh_source_ip   = "${MY_IP}/32"
 EOF
 

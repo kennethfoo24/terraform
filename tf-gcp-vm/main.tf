@@ -43,9 +43,10 @@ resource "google_compute_firewall" "allow_ssh" {
   project = var.project_id
   network = google_compute_network.default.self_link
 
+  # Allow SSH (22) and RDP (3389)
   allow {
     protocol = "tcp"
-    ports    = ["22"]
+    ports    = ["22", "3389"]
   }
 
   # Adjust the CIDR range as needed (here allowing SSH from anywhere).
@@ -53,17 +54,17 @@ resource "google_compute_firewall" "allow_ssh" {
 }
 
 # 4) Create an Ubuntu VM attached to the custom VPC/subnet
-resource "google_compute_instance" "ubuntu_vm" {
+resource "google_compute_instance" "vm" {
   name         = var.vm_name
-  machine_type = "e2-micro"
+  machine_type = "e2-medium"
   zone         = var.zone
 
   # Boot disk with an Ubuntu image
   boot_disk {
     initialize_params {
-      image = "ubuntu-os-cloud/ubuntu-2004-lts"
-      size  = 10
-      type  = "pd-standard"
+      image = var.os_type
+      size  = 32
+      type  = "pd-ssd"
     }
   }
 
@@ -87,10 +88,15 @@ output "subnetwork_name" {
 
 output "vm_name" {
   description = "Name of the newly created VM"
-  value       = google_compute_instance.ubuntu_vm.name
+  value       = google_compute_instance.vm.name
 }
 
 output "zone" {
   description = "Zone of the newly created VM"
-  value       = google_compute_instance.ubuntu_vm.zone
+  value       = google_compute_instance.vm.zone
+}
+
+output "boot_disk_image" {
+  description = "Image used for the VM's boot disk"
+  value       = google_compute_instance.vm.boot_disk[0].initialize_params[0].image
 }
