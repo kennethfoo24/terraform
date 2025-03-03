@@ -1,5 +1,10 @@
 #! /bin/bash
 
+# Ensure GOOGLE_CLOUD_PROJECT is set
+if [ -z "$GOOGLE_CLOUD_PROJECT" ]; then
+    export GOOGLE_CLOUD_PROJECT=$(gcloud config get-value project)
+fi
+
 # this will create a terraform.tfvars file to be used with cloud shell
 cat > terraform.tfvars <<EOF
 region          = "us-central1"
