@@ -1,5 +1,10 @@
 #! /bin/bash
 
+# Ensure GOOGLE_CLOUD_PROJECT is set
+if [ -z "$GOOGLE_CLOUD_PROJECT" ]; then
+    export GOOGLE_CLOUD_PROJECT=$(gcloud config get-value project)
+fi
+
 # Fetch your current public/external IP (this uses an external service).
 # You could also use checkip.amazonaws.com or ifconfig.me or ipinfo.io, etc.
 MY_IP=$(curl -s http://checkip.amazonaws.com)
