@@ -34,6 +34,7 @@ resource "google_container_cluster" "default" {
   location           = var.location
   initial_node_count = 3
   min_master_version = data.google_container_engine_versions.default.latest_master_version
+  deletion_protection = false
   network            = google_compute_subnetwork.default.name
   subnetwork         = google_compute_subnetwork.default.name
 
