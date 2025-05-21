@@ -5,6 +5,10 @@ if [ -z "$GOOGLE_CLOUD_PROJECT" ]; then
     export GOOGLE_CLOUD_PROJECT=$(gcloud config get-value project)
 fi
 
+# Fetch your current public/external IP (this uses an external service).
+# You could also use checkip.amazonaws.com or ifconfig.me or ipinfo.io, etc.
+MY_IP=$(curl -s http://checkip.amazonaws.com)
+
 # this will create a terraform.tfvars file to be used with cloud shell
 cat > terraform.tfvars <<EOF
 region          = "us-central1"
@@ -15,6 +19,7 @@ name            = "kenneth-k8-sample"
 network_name    = "kenneth-k8-sample"
 subnet_cidr1    = "10.10.0.0/24"
 subnet_cidr2    = "10.11.0.0/24"
+ssh_source_ip   = "${MY_IP}/32"
 EOF
 
 terraform init
