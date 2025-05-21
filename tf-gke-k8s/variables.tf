@@ -22,3 +22,8 @@ variable "subnet_cidr1" {
 variable "subnet_cidr2" {
     description = "This will create an additional cidr range that you can define in the tf vars file"
 }
+variable "ssh_source_ip" {
+  type        = string
+  description = "CIDR range allowed to SSH into the VM (e.g., x.x.x.x/32 for your public IP)"
+  default     = "0.0.0.0/0"  # <-- You can override this in terraform.tfvars or via -var on CLI
+}
