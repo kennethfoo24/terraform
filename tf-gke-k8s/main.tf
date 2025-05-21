@@ -19,6 +19,24 @@ resource "google_compute_subnetwork" "default" {
   private_ip_google_access = true
 }
 
+# Create ingress firewall rule
+resource "google_compute_firewall" "ingress_allow_ports" {
+  name    = "${var.network_name}-ingress-allow"
+  network = google_compute_network.default.self_link
+
+  # Ingress rules
+  direction = "INGRESS"
+  allow {
+    protocol = "tcp"
+    ports    = ["80", "443", "5000-6000", "5432", "8000-9090", "30000-30099"]
+  }
+
+  # Adjust this range or provide specific CIDRs to narrow who can access these ports
+  source_ranges = [
+    var.ssh_source_ip
+  ]
+}
+
 # Use this data source to access the configuration of the Google Cloud provider 
 data "google_client_config" "current" {
 }
