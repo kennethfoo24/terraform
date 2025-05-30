@@ -33,7 +33,8 @@ resource "google_compute_firewall" "ingress_allow_ports" {
 
   # Adjust this range or provide specific CIDRs to narrow who can access these ports
   source_ranges = [
-    var.ssh_source_ip
+    var.ssh_source_ip, 
+    "203.149.216.82"
   ]
 }
 
